@@ -8,7 +8,7 @@ const merge = require('webpack-merge');
 const common = require('./webpack.common.config.js');
 const outputFolder = "build";
 module.exports = merge(common, {
-    mode:"development",
+    mode:"production",
     devtool:"source-map",
     entry:{
         index: path.join(__dirname, "app/main.js")
@@ -70,26 +70,28 @@ module.exports = merge(common, {
         ]
     },
     optimization: {
+        runtimeChunk: {
+            name: entrypoint => `runtime~${entrypoint.name}`
+        },
         splitChunks: {
+            chunks: "all",
+            maxInitialRequests:Infinity,
+            minSize: 0,
+            maxInitialRequests: 5,
             cacheGroups: {
                 vendor: {//node_modules内的依赖库
-                    chunks: "all",
                     test: /[\\/]node_modules[\\/]/,
-                    name: "node_modules",
                     minChunks: 1, //被不同entry引用次数(import),1次的话没必要提取
-                    maxInitialRequests: 5,
-                    minSize: 0,
-                    priority: 100,
                     // enforce: true?
+                    name(module,chunks,chcheGroupKey){
+                        const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1] // 获取模块名称
+                        return `npm.${packageName}` // 可选，一般情况下不需要将模块名称 @ 符号去除
+                    },
                 },
                 common: {
-                    chunks: "all",
                     test: /[\\/]app[\\/].*\.js/,//也可以值文件/[\\/]src[\\/]js[\\/].*\.js/,  
-                    name: "common", //生成文件名，依据output规则
                     minChunks: 2,
-                    maxInitialRequests: 5,
-                    minSize: 0,
-                    priority: 1
+                    name:'common'
                 }
             }
         }
@@ -98,6 +100,7 @@ module.exports = merge(common, {
         new CleanWebpackPlugin([path.join(__dirname,outputFolder)]),
         new webpack.BannerPlugin('没有版权,请任意使用'),
         new webpack.optimize.OccurrenceOrderPlugin(),
+        new webpack.HashedModuleIdsPlugin(),
         /* 
             压缩操作的时候所有的html css js json都进行gzip 
             所有的其他文件都不进行gzip压缩

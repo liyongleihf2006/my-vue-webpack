@@ -87,8 +87,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             filename: 'index.html',
             template: path.join(__dirname, "public/index.html"),
-            favicon: path.join(__dirname,"public/favicon.ico"),
-            chunks: ["node_modules", "common", "index"]
+            favicon: path.join(__dirname,"public/favicon.ico")
         }),
         new CleanWebpackPlugin([path.join(__dirname, "dist")]),
         new VueLoaderPlugin(),

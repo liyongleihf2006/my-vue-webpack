@@ -3,12 +3,12 @@
 </template>
 
 <script>
-/* import * as axios from "axios"; */
+import * as axios from "axios";
 import _ from "lodash";
 import {cube} from "../../util/math";
 export default {
   async created(){
-    /* console.log("axios",axios); */
+    console.log("axios",axios);
     console.log("_",_.join);
     /* let { data } = await axios.get("menu");
     console.log(data); */
