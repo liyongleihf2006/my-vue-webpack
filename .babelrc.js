@@ -1,6 +1,7 @@
 let targets = "last 50 Chrome versions"
 let plugins = [
-  ["@babel/plugin-transform-runtime"]
+  ["@babel/plugin-transform-runtime"],
+  ["@babel/plugin-syntax-dynamic-import"]
 ];
 if (process.env.NODE_ENV === "prod") {
   targets = "ie 9";
