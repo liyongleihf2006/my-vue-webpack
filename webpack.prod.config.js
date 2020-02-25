@@ -1,5 +1,5 @@
 //定义为生产环境
-process.env.NODE_ENV="prod";
+process.env.NODE_ENV="production";
 const path = require('path');
 const webpack = require('webpack');
 const CompressionPlugin = require("compression-webpack-plugin");
